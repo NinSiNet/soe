@@ -1,0 +1,141 @@
+
+mysql> insert into team(id,name,foundeddate)values(1,"Manu",1878-01-10);
+ERROR 1292 (22007): Incorrect date value: '1867' for column 'foundeddate' at row 1
+mysql> desc team;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| id          | int          | YES  |     | NULL    |       |
+| name        | varchar(100) | YES  |     | NULL    |       |
+| foundeddate | date         | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+3 rows in set (0.39 sec)
+
+
+mysql> select*from team;
++------+-------+-------------+
+| id   | name  | foundeddate |
++------+-------+-------------+
+|    1 | Manu  | 2020-07-15  |
+|    2 | Lulu  | 2020-07-16  |
+|    3 | Lusar | 2020-07-17  |
+|    4 | khan  | 2020-07-18  |
++------+-------+-------------+
+4 rows in set (0.02 sec)
+
+mysql> select*from team where id=2;
++------+------+-------------+
+| id   | name | foundeddate |
++------+------+-------------+
+|    2 | Lulu | 2020-07-16  |
++------+------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select*from team where id=4;
++------+------+-------------+
+| id   | name | foundeddate |
++------+------+-------------+
+|    4 | khan | 2020-07-18  |
++------+------+-------------+
+1 row in set (0.00 sec)
+
+
+mysql> select*from player;
++------+-------+---------+------+--------+--------+--------+
+| id   | name  | jersyno | age  | salary | teamid | height |
++------+-------+---------+------+--------+--------+--------+
+|    1 | messi |      10 |   22 | 100000 |      2 |      5 |
+|    2 | user  |      11 |   23 | 200000 |      3 |      6 |
+|    3 | lili  |      12 |   24 | 300000 |      4 |      7 |
+|    4 | babu  |      13 |   25 | 400000 |      5 |      8 |
++------+-------+---------+------+--------+--------+--------+
+4 rows in set (0.05 sec)
+
+mysql> select*from player where salary>100000;
++------+------+---------+------+--------+--------+--------+
+| id   | name | jersyno | age  | salary | teamid | height |
++------+------+---------+------+--------+--------+--------+
+|    2 | user |      11 |   23 | 200000 |      3 |      6 |
+|    3 | lili |      12 |   24 | 300000 |      4 |      7 |
+|    4 | babu |      13 |   25 | 400000 |      5 |      8 |
++------+------+---------+------+--------+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select*from player where salary<300000;
++------+-------+---------+------+--------+--------+--------+
+| id   | name  | jersyno | age  | salary | teamid | height |
++------+-------+---------+------+--------+--------+--------+
+|    1 | messi |      10 |   22 | 100000 |      2 |      5 |
+|    2 | user  |      11 |   23 | 200000 |      3 |      6 |
++------+-------+---------+------+--------+--------+--------+
+2 rows in set (0.00 sec)
+
+
+
+mysql> select name,(select sum(salary)from player where player.teamid=team.id)as salary from team;
++-------+--------+
+| name  | salary |
++-------+--------+
+| Manu  |   NULL |
+| Lulu  | 100000 |
+| Lusar | 200000 |
+| khan  | 300000 |
++-------+--------+
+4 rows in set (0.05 sec)
+
+mysql> select*from player where height<7;
++----+-------+---------+------+--------+--------+--------+
+| id | name  | jersyno | age  | salary | teamid | height |
++----+-------+---------+------+--------+--------+--------+
+|  1 | messi |      10 |   22 | 100000 |      2 |      5 |
+|  2 | user  |      11 |   23 | 200000 |      3 |      6 |
++----+-------+---------+------+--------+--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select*from player where height>7;
++----+------+---------+------+--------+--------+--------+
+| id | name | jersyno | age  | salary | teamid | height |
++----+------+---------+------+--------+--------+--------+
+|  4 | babu |      13 |   25 | 400000 |      5 |      8 |
++----+------+---------+------+--------+--------+--------+
+1 row in set (0.01 sec)
+
+mysql> select name,(select avg(salary)from player where player.teamid)as average from team;
++-------+-------------+
+| name  | average     |
++-------+-------------+
+| Manu  | 250000.0000 |
+| Lulu  | 250000.0000 |
+| Lusar | 250000.0000 |
+| khan  | 250000.0000 |
++-------+-------------+
+4 rows in set (0.01 sec)
+
+
+mysql> select Name,Salary from player where Salary in (select max(Salary) from Player);
++------+--------+
+| Name | Salary |
++------+--------+
+| babu | 400000 |
++------+--------+
+1 row in set (0.05 sec)
+
+mysql> select Name,Salary from player where Salary in (select min(Salary) from Player);
++-------+--------+
+| Name  | Salary |
++-------+--------+
+| messi | 100000 |
++-------+--------+
+1 row in set (0.00 sec)
+
+
+
+mysql> select * from player where age>24 and salary>300000;
++----+------+---------+------+--------+--------+--------+
+| id | name | jersyno | age  | salary | teamid | height |
++----+------+---------+------+--------+--------+--------+
+|  4 | babu |      13 |   25 | 400000 |      5 |      8 |
++----+------+---------+------+--------+--------+--------+
+1 row in set (0.02 sec)
+
+mysql>
